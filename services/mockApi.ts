@@ -5,8 +5,23 @@ import { AppData, AppCategory } from '../types';
 // Simulate network delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+const STORAGE_KEY = 'apkcunk_db_v1';
+
+// Initialize state from LocalStorage to persist uploads, fallback to MOCK_APPS
+const loadApps = (): AppData[] => {
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            return JSON.parse(stored);
+        }
+    } catch (e) {
+        console.warn("Failed to load apps from storage", e);
+    }
+    return [...MOCK_APPS];
+};
+
 // Local mutable state for the session
-let currentApps = [...MOCK_APPS];
+let currentApps = loadApps();
 
 export const api = {
   getFeaturedApps: async (): Promise<AppData[]> => {
@@ -35,11 +50,16 @@ export const api = {
     );
   },
 
-  // Add a new app to the store
+  // Add a new app to the store and persist to localStorage
   addApp: async (newApp: AppData): Promise<void> => {
     await delay(800);
     // Prepend to list so it shows up first
     currentApps = [newApp, ...currentApps];
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(currentApps));
+    } catch (e) {
+        console.error("Failed to persist app to storage", e);
+    }
   },
 
   // Real scraping via Gemini AI + CORS Proxy Fallback
