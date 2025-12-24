@@ -6,7 +6,6 @@
     <title>ApkCunk</title>
     <script>
       // Robust Polyfills for Vercel/Static Hosting
-      // Defines 'global' and a complete 'process' object to satisfy Node.js-based libraries
       window.global = window;
       if (typeof process === "undefined") {
         window.process = {
@@ -88,5 +87,6 @@
   </head>
   <body class="text-slate-200 antialiased">
     <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>

@@ -860,7 +860,7 @@ const AdminAddApp: React.FC = () => {
     };
 
     const handleAIEnhance = async () => {
-        if (!process.env.API_KEY) {
+        if (!process?.env?.API_KEY) {
            setDescription((prev) => prev + "\n\n<p><i>Enhanced by Gemini AI: Enjoy this amazing app with premium features unlocked!</i></p>");
            return;
         }
