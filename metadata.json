@@ -1,0 +1,5 @@
+{
+  "name": "APK Forge Platform",
+  "description": "A production-ready web platform for hosting and distributing Android APK/MOD files with automated metadata fetching simulation and admin management.",
+  "requestFramePermissions": []
+}
