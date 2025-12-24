@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ApkCunk</title>
     <script>
-      // Polyfill process to prevent "ReferenceError: process is not defined" 
-      // which causes blank screens on static hosts like Vercel.
+      // Robust Polyfills for Vercel/Static Hosting
+      // Defines 'global' and a complete 'process' object to satisfy Node.js-based libraries
+      window.global = window;
       if (typeof process === "undefined") {
-        window.process = { env: {} };
+        window.process = {
+          env: {},
+          version: 'v16.0.0', // Fake version to prevent version check crashes
+          platform: 'linux',
+          nextTick: function(cb) { setTimeout(cb, 0); }
+        };
       }
     </script>
     <script src="https://cdn.tailwindcss.com"></script>

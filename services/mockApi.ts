@@ -23,6 +23,18 @@ const loadApps = (): AppData[] => {
 // Local mutable state for the session
 let currentApps = loadApps();
 
+// Helper to safely get API Key without crashing if process is undefined
+const getApiKey = () => {
+    try {
+        if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+            return process.env.API_KEY;
+        }
+    } catch (e) {
+        return undefined;
+    }
+    return undefined;
+};
+
 export const api = {
   getFeaturedApps: async (): Promise<AppData[]> => {
     await delay(500);
@@ -83,10 +95,11 @@ export const api = {
     }
 
     // 2. ATTEMPT 1: Google Gemini AI (Smart Scraping)
-    if (process.env.API_KEY) {
+    const apiKey = getApiKey();
+    if (apiKey) {
         try {
             console.log("Attempting AI Fetch for:", packageId);
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+            const ai = new GoogleGenAI({ apiKey: apiKey });
             
             // We use gemini-3-flash-preview for speed + search tools
             const response = await ai.models.generateContent({
